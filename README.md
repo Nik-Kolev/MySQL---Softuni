@@ -1,1 +1,1 @@
-# MySQL---Softuni
+MySql Exercises for Softuni Judge system.
