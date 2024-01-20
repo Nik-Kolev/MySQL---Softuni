@@ -50,22 +50,50 @@ WHERE country_name  LIKE '%a%a%a%' -- WITH regex WHERE country_name REGEXP '.*a.
 ORDER BY iso_code ;
 
 -- 11.	Mix of Peak and River Names
+SELECT peak_name, river_name, lower(concat(peak_name, substring(river_name, 2))) AS'mix' FROM rivers, peaks
+WHERE right(peak_name, 1) = left(river_name,1)
+ORDER BY mix
 
 -- 12.	Games from 2011 and 2012 Year
 SELECT name, date_format(`start`, '%Y-%m-%d') AS start  FROM games g 
 WHERE YEAR (`start`) BETWEEN 2011 AND 2012
-ORDER BY date_format(`start`, '%Y-%m-%d'), name,
+ORDER BY start, name
 LIMIT 50;
 
 -- 13.	User Email Providers
 SELECT user_name, SUBSTRING(email FROM LOCATE('@', email) + 1) AS 'email provider' FROM users u 
+-- Substring_index(email, '@', -1) works aswell 
+-- regexp_replace(email, '.*@', '')
 ORDER BY SUBSTRING(email FROM LOCATE('@', email) + 1), user_name;
 
 -- 14.  Get Users with IP Address Like Pattern
 SELECT  user_name, ip_address  FROM users u 
 WHERE ip_address LIKE '___.1%.%.___'
-ORDER BY user_name 
+ORDER BY user_name ;
 
 -- 15.	Show All Games with Duration and Part of the Day
+SELECT 
+name AS games,
+CASE 
+	WHEN HOUR(START) BETWEEN 0 AND 11 THEN 'Morning'
+	WHEN hour(START) BETWEEN 12 AND 17 THEN 'Afternoon'
+	ELSE 'Evening' 
+END AS 'Part of the day',
+CASE 
+	WHEN duration <= 3 THEN 'Extra Short'
+	WHEN duration BETWEEN 4 AND 6 THEN 'Short'
+	WHEN duration BETWEEN 7 AND 10 THEN 'Long'
+	ELSE 'Extra Long'
+END AS 'Duration'
+FROM games g 
+ORDER BY games
 
 -- 16.	Orders Table
+SELECT 
+product_name, 
+order_date, 
+date_add(order_date, INTERVAL 3 DAY) AS 'pay_due', 
+date_add(order_date, INTERVAL 30 DAY) AS 'deliver_date'  
+FROM orders o 
+
+
