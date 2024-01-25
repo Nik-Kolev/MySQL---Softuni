@@ -94,3 +94,58 @@ SELECT AVG(salary) AS min_average_salary FROM employees e
 GROUP BY e.department_id 
 ORDER BY min_average_salary
 LIMIT 1;
+
+-- 12.	Highest Peaks in Bulgaria
+SELECT c.country_code, m.mountain_range, p.peak_name, p.elevation  FROM countries c 
+JOIN mountains_countries mc ON mc.country_code = c.country_code
+JOIN mountains m ON  mc.mountain_id = m.id
+JOIN peaks p ON mc.mountain_id = p.mountain_id  
+WHERE c.country_code = 'BG' AND p.elevation > 2835
+ORDER BY p.elevation desc;
+
+-- 13.	Count Mountain Ranges
+SELECT c.country_code, COUNT(m.mountain_range) AS mountain_range  FROM countries c 
+JOIN mountains_countries mc ON mc.country_code = c.country_code 
+JOIN mountains m ON m.id = mc.mountain_id 
+WHERE c.country_name IN ('United States', 'Russia', 'Bulgaria')
+GROUP BY c.country_code 
+ORDER BY mountain_range DESC;
+ 
+-- 14.	Countries with Rivers
+SELECT c.country_name, r.river_name  FROM countries c 
+LEFT JOIN countries_rivers cr ON c.country_code = cr.country_code 
+LEFT JOIN rivers r ON cr.river_id = r.id 
+WHERE c.continent_code = 'AF'
+ORDER BY c.country_name
+LIMIT 5;
+
+-- 15.	*Continents and Currencies
+SELECT
+	c.continent_code,
+	c.currency_code,
+	COUNT(*) AS currency_usage
+FROM
+	countries c
+GROUP BY
+	c.continent_code,
+	c.currency_code
+HAVING
+	currency_usage > 1
+	AND currency_usage = (
+	SELECT
+		COUNT(*) AS count_of_currencies
+	FROM
+		countries c2
+	WHERE
+		c2.continent_code = c.continent_code
+		GROUP BY c2.currency_code
+		ORDER BY count_of_currencies desc
+		LIMIT 1)
+ORDER BY
+	c.continent_code,
+	c.currency_code;
+
+
+-- 16.  Countries Without Any Mountains
+
+-- 17.  Highest Peak and Longest River by Country
