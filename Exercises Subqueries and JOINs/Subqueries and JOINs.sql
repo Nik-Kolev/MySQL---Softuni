@@ -147,5 +147,8 @@ ORDER BY
 
 
 -- 16.  Countries Without Any Mountains
+SELECT count(*)  FROM countries c 
+LEFT JOIN mountains_countries mc ON mc.country_code =  c.country_code
+WHERE mc.mountain_id IS NULL;
 
 -- 17.  Highest Peak and Longest River by Country
