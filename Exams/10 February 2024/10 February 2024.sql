@@ -89,7 +89,7 @@ WHERE position_id IN (5,8,11,13);
 
 -- 04 Delete
 DELETE FROM preserves 
-WHERE established_on IS NULL 
+WHERE established_on IS NULL;
 
 -- 05.	Most experienced workers
 SELECT
@@ -138,7 +138,7 @@ SELECT
 	END) AS category
 FROM
 	preserves p 
-ORDER BY area DESC 
+ORDER BY area DESC;
 
 -- 10.	Extract average salary
 delimiter $$
